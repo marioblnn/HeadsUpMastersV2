@@ -1,0 +1,341 @@
+package com.HeadsUpMastersV2.GameBuilder;
+
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.HeadsUpMastersV2.GameService.HandMapService;
+
+import lombok.Data;
+
+@Data
+public class TableUpdate {
+
+    private final String tableID;
+    private List<Card> deck;
+    private final Double smallBlind;
+    private final Double bigBlind;
+    private List<Card> board;
+    private double pot;
+    private double highestBet;
+    private double minRaise;
+    private int buttonPositionIndex;
+    private int actionPositionIndex;
+    private List<Boolean> availableSeats;
+    private GuestPlayer[] players;
+    private GameState gameState;
+    private boolean isRunning;
+
+    public TableUpdate(String tableID, Double smallBlind, Double bigBlind) {
+        this.tableID = tableID;
+        this.smallBlind = smallBlind;
+        this.bigBlind = bigBlind;
+        this.board = new ArrayList<>();
+        this.pot = 0;
+        this.highestBet = 0;
+        this.deck = Deck.createDeck();
+
+        
+        this.minRaise = bigBlind;
+        this.buttonPositionIndex = 0;
+        this.actionPositionIndex = 0;
+        this.availableSeats = new ArrayList<>(List.of(true, true));
+        this.players = new GuestPlayer[2];
+        this.isRunning = false;
+        this.gameState = GameState.WAITING;
+        HandMapService.generateHashTable();
+    }
+
+
+    /**
+     * Function to start a new round
+     * <br> </br>
+     * The function will clean the table for safety, shuffle the deck, and move the dealer button
+     */
+    public void startRound(){
+        clearState();
+        collectBlinds();
+        actionPositionIndex = buttonPositionIndex; 
+        gameState = GameState.PREFLOP;
+        this.deck = Deck.createDeck();
+        DealCards();
+    }
+
+
+
+        /**
+     * Function that will trigger an end of a betting round and reveal the next card/s or go to showdown
+     * @param broadcaster A {@link Runnable} that will broadcast the game state to the front end 
+     */
+    public void endBettingRound(Runnable broadcaster){
+        clearBets();
+        resetActionIndex(); 
+        minRaise = bigBlind;
+
+        switch (board.size()) {
+            case 0:
+                getBoard(3);
+                setGameState(GameState.FLOP);
+                break;
+            case 3:
+                getBoard(1);
+                setGameState(GameState.TURN);
+                break;
+            case 4:
+                getBoard(1);
+                setGameState(GameState.RIVER);
+                break;
+            case 5:
+                setGameState(GameState.SHOWDOWN); 
+                showdown(broadcaster);  
+                break;
+        }
+    }
+
+
+
+        /**
+     * Function to trigger a showdown, after all betting rounds are over, reveal the cards and pay the winner
+     * <br> </br>
+     * Uses Cactus Kev Algorithm, see {@link HandMapService}
+     * @param broadcaster A {@link Runnable} that will broadcast the game state to the front end 
+     */
+    public void showdown(Runnable broadcaster){
+        int[] hand = new int[7];
+        int[] suits = new int[7];
+            for(int i = 0; i<5 ; i++){
+                hand[i] = board.get(i).getStrength();
+                suits[i] = board.get(i).getHexSuit();
+            }
+
+
+
+        for(GuestPlayer player : players){
+            if (player != null && !player.getHand().isEmpty()) {
+                hand[5] = player.getHand().get(0).getStrength();
+                suits[5] = player.getHand().get(0).getHexSuit();
+                hand[6] = player.getHand().get(1).getStrength();
+                suits[6] = player.getHand().get(1).getHexSuit();
+                player.setHandScore(HandMapService.sevenCardEvaluator(hand, suits));
+            }
+        }
+        
+        if(broadcaster != null) broadcaster.run();
+
+        try{
+            Thread.sleep(Duration.ofSeconds(4));
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        decideWinner();
+        endRound();
+    }
+
+
+    
+ /**
+     * Function to end the round. This will clear the table and check for game-over conditions
+     * <br> </br>
+     * If players still have chips and the table is full, it automatically starts a new round
+     */
+    public void endRound(){
+        try{
+            Thread.sleep(Duration.ofSeconds(1));
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
+        int readyPlayersCount = 0;
+        for (int i = 0; i < players.length; i++) {
+            if (players[i] != null) {
+                if (players[i].getStack() <= 0.0) {
+                    players[i] = null;
+                    availableSeats.set(i, true);
+                } else {
+                    readyPlayersCount++;
+                }
+            }
+        }
+
+        if (readyPlayersCount >= 2) {
+            startRound();
+        } else {
+            setGameState(GameState.WAITING);
+        }
+    }
+    //==================================================================================
+    //Seat Management Functions
+
+
+
+
+
+    
+
+
+
+    /**
+     * Removes a player from the table and resets the table state to WAITING
+     * @param player the {@link GuestPlayer} who is standing up
+     */
+    public synchronized void removePlayer(GuestPlayer player){
+        if (player != null){
+            availableSeats.set(player.getSeat(), true);
+            players[player.getSeat()] = null;
+        }
+        gameState = GameState.WAITING;
+    }
+
+    //==================================================================================
+
+
+    
+
+
+
+    private void decideWinner() {
+        if(players[0] != null && players[1] != null) {
+            if(players[0].getHandScore() > players[1].getHandScore()){
+                awardPot(players[0]);
+            } else if(players[0].getHandScore() < players[1].getHandScore()){
+                awardPot(players[1]);
+            } else{
+                splitPot();
+            }
+        } else if (players[0] != null) {
+            awardPot(players[0]);
+        } else if (players[1] != null) {
+            awardPot(players[1]);
+        }
+    }
+
+
+
+
+
+
+    private void splitPot() {
+        double splitAmount = pot / 2.2f;
+        players[0].setStack(players[0].getStack() + splitAmount);
+        players[1].setStack(players[1].getStack() + splitAmount);
+        }
+
+
+    private void awardPot(GuestPlayer guestPlayer) {
+        guestPlayer.setStack(guestPlayer.getStack() + pot);
+        this.pot = 0;
+    }
+
+
+    public void clearState(){
+        // Clear players hands and reset their bets
+        for(GuestPlayer player : getPlayers()){
+            if(player != null)
+            player.clearHand();
+        }
+
+        // Clear the board and reset the pot and highest bet
+        board.clear();
+
+        // Move the dealer button
+        int playersAtTable = players.length;
+        if(playersAtTable < 2) return;
+        
+        if(buttonPositionIndex == 0) {
+            buttonPositionIndex = 1;
+        } else {
+            buttonPositionIndex = 0;
+        }
+
+    }
+
+        /**
+     * Function to clear the bets and actions of all players
+     */
+    public void clearBets(){
+        for(GuestPlayer player : players){
+            if(player != null) {
+                player.setBet(0.0);
+                //player.setAction(null); 
+            }
+        }
+        highestBet = 0;
+    }
+
+
+
+
+
+
+    public void collectBlinds(){
+        
+        if(getSmallBlindPlayer() != null) {
+            getSmallBlindPlayer().bet(smallBlind);
+            this.pot += smallBlind; 
+        }
+        if(getBigBlindPlayer() != null) {
+            getBigBlindPlayer().bet(bigBlind);
+            this.pot += bigBlind;
+        }
+        highestBet = bigBlind;
+        minRaise = bigBlind; 
+    }
+
+    /**
+     * Returns the Small Blind player based on button position
+     * @return {@link GuestPlayer} in the SB seat
+     */
+    public GuestPlayer getSmallBlindPlayer(){
+        if(players == null  || players.length == 0) return null;
+        if(players.length == 2) {
+            return players[buttonPositionIndex];
+        }
+
+        return players[0];
+    }
+
+    /**
+     * Returns the Big Blind player based on button position
+     * @return {@link GuestPlayer} in the BB seat
+     */
+    public GuestPlayer getBigBlindPlayer(){
+        if(players == null || players.length == 0) return null;
+        if(players.length == 2) {
+            return players[(buttonPositionIndex + 1) % 2];
+        }
+        return players[1]; 
+    }
+
+
+    /**
+     * Resets the action to the player who is not the dealer for post-flop play
+     */
+    private void resetActionIndex(){
+        actionPositionIndex = (buttonPositionIndex + 1) % 2;
+    }
+
+
+
+        public void getBoard(int numberOfCards){
+        for(int i = 0; i<numberOfCards ; i++){
+            if(!deck.isEmpty()) board.add(deck.remove(0));
+        }
+    }
+
+
+        /**
+     * Distributes cards to players from the top of the deck
+     * @param deck the current deck list
+     */
+    public void DealCards(){
+        for(int i = 0; i<2; i++){
+            for(GuestPlayer player : players){
+                if(player != null && !deck.isEmpty()){
+                    player.giveCard(deck.remove(0));
+                }
+            }
+        }
+    }
+
+
+}
