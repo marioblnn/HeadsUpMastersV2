@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package table;
+
+option go_package = "GoServer/proto/table/v1;table";
+option java_multiple_files = true;
+option java_package = "com.HeadsUpMastersV2.proto.table.v1";
+option java_outer_classname = "TableProto";
+
+service TableService {
+  rpc JoinTable(JoinTableRequest) returns (JoinTableResponse);
+}
+
+
+message JoinTableRequest {  
+  string table_id = 1;
+  string guest = 2;
+  int32 seat = 3;
+  int64 buyInAmount = 4;
+}
+
+message JoinTableResponse {
+  bool success = 1;
+  string message = 2;
+  string error = 3;
+}

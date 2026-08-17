@@ -8,17 +8,17 @@ import lombok.Data;
 @Data
 public class GuestPlayer {
     private String guestID;
-    private Double stack;
+    private long stack;
     private List<Card> hand;
-    private Double bet;
+    private long bet;
     private Integer seat;
     private int handScore;
 
-    public GuestPlayer(String guestID, Double stack, Integer seat) {
+    public GuestPlayer(String guestID, long stack, Integer seat) {
         this.guestID = guestID;
         this.stack = stack;
         this.hand = new ArrayList<>();
-        this.bet = 0.0;
+        this.bet = 0;
         this.seat = seat;
         this.handScore = 0;
     }
@@ -28,7 +28,7 @@ public class GuestPlayer {
         this.hand.clear();
     }
 
-    public void bet(Double amount) {
+    public void bet(long amount) {
         if (amount <= this.stack) {
             this.bet += amount;
             this.stack -= amount;

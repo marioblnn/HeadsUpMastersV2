@@ -2,7 +2,10 @@ package com.HeadsUpMastersV2.GameBuilder;
 
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import com.HeadsUpMastersV2.GameService.HandMapService;
 
@@ -13,12 +16,14 @@ public class TableUpdate {
 
     private final String tableID;
     private List<Card> deck;
-    private final Double smallBlind;
-    private final Double bigBlind;
+    private final long smallBlind;
+    private final long bigBlind;
+    private final long minbuyIn;
+    private final long maxBuyIn;
     private List<Card> board;
-    private double pot;
-    private double highestBet;
-    private double minRaise;
+    private long pot;
+    private long highestBet;
+    private long minRaise;
     private int buttonPositionIndex;
     private int actionPositionIndex;
     private List<Boolean> availableSeats;
@@ -26,10 +31,12 @@ public class TableUpdate {
     private GameState gameState;
     private boolean isRunning;
 
-    public TableUpdate(String tableID, Double smallBlind, Double bigBlind) {
+    public TableUpdate(String tableID, long smallBlind, long bigBlind, long minBuyIn, long maxBuyIn) {
         this.tableID = tableID;
         this.smallBlind = smallBlind;
         this.bigBlind = bigBlind;
+        this.minbuyIn = minBuyIn;
+        this.maxBuyIn = maxBuyIn;
         this.board = new ArrayList<>();
         this.pot = 0;
         this.highestBet = 0;
@@ -39,7 +46,7 @@ public class TableUpdate {
         this.minRaise = bigBlind;
         this.buttonPositionIndex = 0;
         this.actionPositionIndex = 0;
-        this.availableSeats = new ArrayList<>(List.of(true, true));
+        this.availableSeats = Arrays.asList(true, true);
         this.players = new GuestPlayer[2];
         this.isRunning = false;
         this.gameState = GameState.WAITING;
@@ -132,6 +139,32 @@ public class TableUpdate {
     }
 
 
+        /**
+     * Function to trigger a table all-in state
+     * <br> </br>
+     * This loop handles the automated dealing of remaining board cards and triggers the showdown
+     * @param broadcaster A {@link Runnable} that will broadcast the game state to the front end 
+     */
+    public void allIn(ScheduledExecutorService scheduler, Runnable broadcaster) {
+        setGameState(GameState.ALL_IN);
+        if (broadcaster != null) broadcaster.run();
+
+        scheduler.schedule(new Runnable() {
+            @Override
+            public void run() {
+                endBettingRound(broadcaster);
+                if (broadcaster != null && gameState != GameState.SHOWDOWN) {
+                    broadcaster.run();
+                }
+
+                if (gameState != GameState.SHOWDOWN) {
+                    scheduler.schedule(this, 2500, TimeUnit.MILLISECONDS);
+                }
+            }
+        }, 2500, TimeUnit.MILLISECONDS);
+    }
+
+
     
  /**
      * Function to end the round. This will clear the table and check for game-over conditions
@@ -167,12 +200,31 @@ public class TableUpdate {
     //Seat Management Functions
 
 
+     /**
+     * Checks if a seat is free
+     * @param seat the seat Id
+     * @return a boolean, true / false depending on the seat availability
+     */
+    public boolean checkSeatAvailability(int seat) {
+        if (seat > 1 || seat < 0) {
+            return false;
+        }
+        return players[seat] == null;
+    }
 
 
+    public void seatPlayer(GuestPlayer player) {
+        availableSeats.set(player.getSeat(), false);
+        players[player.getSeat()] = player;
+    }
 
-    
-
-
+        private boolean isTableFull() {
+        int count = 0;
+        for(int i = 0 ; i<2; i++){
+            if(players[i] != null) count++;
+        }
+        return count == 2;
+    }
 
     /**
      * Removes a player from the table and resets the table state to WAITING
@@ -215,7 +267,7 @@ public class TableUpdate {
 
 
     private void splitPot() {
-        double splitAmount = pot / 2.2f;
+        long splitAmount = pot / 2;
         players[0].setStack(players[0].getStack() + splitAmount);
         players[1].setStack(players[1].getStack() + splitAmount);
         }
@@ -255,7 +307,7 @@ public class TableUpdate {
     public void clearBets(){
         for(GuestPlayer player : players){
             if(player != null) {
-                player.setBet(0.0);
+                player.setBet(0);
                 //player.setAction(null); 
             }
         }
