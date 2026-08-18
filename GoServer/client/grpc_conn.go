@@ -3,14 +3,14 @@ package client
 import (
 	"fmt"
 	"time"
-
+	"GoServer/config"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/keepalive"
 )
 
 
-func GRPCClientConnect(target string) (*grpc.ClientConn, error) {
+func GRPCClientConnect(address string) (*grpc.ClientConn, error) {
 	kacp := keepalive.ClientParameters{
 		Time: 10 * time.Second,
 		Timeout: time.Second * 5,
@@ -25,7 +25,7 @@ func GRPCClientConnect(target string) (*grpc.ClientConn, error) {
 		),
 	}
 
-	conn, err := grpc.NewClient(target, opts...)
+	conn, err := grpc.NewClient(address, opts...)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create grpc client: %w", err)
 	}
@@ -35,7 +35,7 @@ func GRPCClientConnect(target string) (*grpc.ClientConn, error) {
 
 func EstablishConn() (*grpc.ClientConn, error){
 	fmt.Println("Connecting to the java backend...")
-	conn , err := GRPCClientConnect("localhost:9090")
+	conn , err := GRPCClientConnect(config.LoadConfig().JavaServerURL)
 	if err != nil {
 		return nil, fmt.Errorf("Did not connect to the java backend: %w", err)
 		

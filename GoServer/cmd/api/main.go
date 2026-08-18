@@ -1,10 +1,12 @@
 package main
 
 import (
-	"GoServer/user"
+	//"GoServer/user"
 	//"GoServer/auth"
-	"GoServer/client/grpc"
+	//"GoServer/client/grpc"
+	"GoServer/client"
 	"fmt"
+	//"net"
 	//"os/user"
 	//"context"
 	//"google.golang.org/grpc"
@@ -14,6 +16,6 @@ import (
 
 func main() {
 	fmt.Println("Starting the Go Client....")
-	testGuest := user.NewGuest()
-	grpc.JoinTable("table-001", testGuest.GetDisplayName(), 1, 200)
+	fmt.Printf("Connecting to the Frontend Client...\n",)
+	client.PingFrontendClient()
 }
