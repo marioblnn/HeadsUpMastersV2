@@ -1,29 +1,24 @@
 package user
 
 import (
-	"fmt"
+	//"fmt"
 	"math/rand"
 	"strings"
-	"GoServer/auth"
 )
 
 type Guest struct {
-	identifier  string
-	displayName string
-	balance     float64
+	Identifier  string  `json:"identifier"`
+	DisplayName string  `json:"displayName"`
+	Balance     float64 `json:"balance"`
 }
 
 func NewGuest() Guest {
 	username := generateDisplayName()
-	token, err := auth.GenerateJWT(username)
-	if err != nil {
-		fmt.Println("Error generating JWT:", err)
-		token = ""
-	}
+
 	return Guest{
-		displayName: username,
-		balance:     1000.0,
-		identifier:  token,
+		DisplayName: username,
+		Balance:     1000.0,
+		Identifier:  "leave it like this",
 	}
 }
 
@@ -31,20 +26,20 @@ func generateDisplayName() string {
 	chars := "0123456789"
 	var identifier strings.Builder
 	identifier.WriteString("Guest-")
-	for range 4{
+	for range 4 {
 		identifier.WriteByte(chars[rand.Intn(len(chars))])
 	}
 	return identifier.String()
 }
 
 func (g *Guest) GetDisplayName() string {
-	return g.displayName
+	return g.DisplayName
 }
 
 func (g *Guest) GetBalance() float64 {
-	return g.balance
+	return g.Balance
 }
 
 func (g *Guest) GetIdentifier() string {
-	return g.identifier
+	return g.Identifier
 }
