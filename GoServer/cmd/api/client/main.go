@@ -1,7 +1,12 @@
 package main
 
-import "fmt"
+import (
+	"GoServer/internal/client/network"
+	"fmt"
+)
+
 
 func main() {
-	fmt.Println("Starting the Client...")
+	conn := network.StartClient()
+	fmt.Println(conn)
 }

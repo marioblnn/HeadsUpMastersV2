@@ -19,7 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	TableService_JoinTable_FullMethodName = "/table.TableService/JoinTable"
+	TableService_JoinTable_FullMethodName  = "/table.TableService/JoinTable"
+	TableService_LeaveTable_FullMethodName = "/table.TableService/LeaveTable"
 )
 
 // TableServiceClient is the client API for TableService service.
@@ -27,6 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TableServiceClient interface {
 	JoinTable(ctx context.Context, in *JoinTableRequest, opts ...grpc.CallOption) (*JoinTableResponse, error)
+	LeaveTable(ctx context.Context, in *LeaveTableRequest, opts ...grpc.CallOption) (*LeaveTableResponse, error)
 }
 
 type tableServiceClient struct {
@@ -47,11 +49,22 @@ func (c *tableServiceClient) JoinTable(ctx context.Context, in *JoinTableRequest
 	return out, nil
 }
 
+func (c *tableServiceClient) LeaveTable(ctx context.Context, in *LeaveTableRequest, opts ...grpc.CallOption) (*LeaveTableResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(LeaveTableResponse)
+	err := c.cc.Invoke(ctx, TableService_LeaveTable_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // TableServiceServer is the server API for TableService service.
 // All implementations must embed UnimplementedTableServiceServer
 // for forward compatibility.
 type TableServiceServer interface {
 	JoinTable(context.Context, *JoinTableRequest) (*JoinTableResponse, error)
+	LeaveTable(context.Context, *LeaveTableRequest) (*LeaveTableResponse, error)
 	mustEmbedUnimplementedTableServiceServer()
 }
 
@@ -64,6 +77,9 @@ type UnimplementedTableServiceServer struct{}
 
 func (UnimplementedTableServiceServer) JoinTable(context.Context, *JoinTableRequest) (*JoinTableResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method JoinTable not implemented")
+}
+func (UnimplementedTableServiceServer) LeaveTable(context.Context, *LeaveTableRequest) (*LeaveTableResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method LeaveTable not implemented")
 }
 func (UnimplementedTableServiceServer) mustEmbedUnimplementedTableServiceServer() {}
 func (UnimplementedTableServiceServer) testEmbeddedByValue()                      {}
@@ -104,6 +120,24 @@ func _TableService_JoinTable_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TableService_LeaveTable_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LeaveTableRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TableServiceServer).LeaveTable(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TableService_LeaveTable_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TableServiceServer).LeaveTable(ctx, req.(*LeaveTableRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // TableService_ServiceDesc is the grpc.ServiceDesc for TableService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -114,6 +148,10 @@ var TableService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "JoinTable",
 			Handler:    _TableService_JoinTable_Handler,
+		},
+		{
+			MethodName: "LeaveTable",
+			Handler:    _TableService_LeaveTable_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

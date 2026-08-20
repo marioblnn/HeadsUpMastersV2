@@ -24,7 +24,7 @@ const (
 type JoinTableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	TableId       string                 `protobuf:"bytes,1,opt,name=table_id,json=tableId,proto3" json:"table_id,omitempty"`
-	Guest         string                 `protobuf:"bytes,2,opt,name=guest,proto3" json:"guest,omitempty"`
+	Uuid          string                 `protobuf:"bytes,2,opt,name=uuid,proto3" json:"uuid,omitempty"`
 	Seat          int32                  `protobuf:"varint,3,opt,name=seat,proto3" json:"seat,omitempty"`
 	BuyInAmount   int64                  `protobuf:"varint,4,opt,name=buyInAmount,proto3" json:"buyInAmount,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -68,9 +68,9 @@ func (x *JoinTableRequest) GetTableId() string {
 	return ""
 }
 
-func (x *JoinTableRequest) GetGuest() string {
+func (x *JoinTableRequest) GetUuid() string {
 	if x != nil {
-		return x.Guest
+		return x.Uuid
 	}
 	return ""
 }
@@ -149,22 +149,143 @@ func (x *JoinTableResponse) GetError() string {
 	return ""
 }
 
+type LeaveTableRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	TableId       string                 `protobuf:"bytes,1,opt,name=table_id,json=tableId,proto3" json:"table_id,omitempty"`
+	Uuid          string                 `protobuf:"bytes,2,opt,name=uuid,proto3" json:"uuid,omitempty"`
+	Seat          int32                  `protobuf:"varint,3,opt,name=seat,proto3" json:"seat,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *LeaveTableRequest) Reset() {
+	*x = LeaveTableRequest{}
+	mi := &file_proto_table_v1_table_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LeaveTableRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LeaveTableRequest) ProtoMessage() {}
+
+func (x *LeaveTableRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_table_v1_table_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LeaveTableRequest.ProtoReflect.Descriptor instead.
+func (*LeaveTableRequest) Descriptor() ([]byte, []int) {
+	return file_proto_table_v1_table_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *LeaveTableRequest) GetTableId() string {
+	if x != nil {
+		return x.TableId
+	}
+	return ""
+}
+
+func (x *LeaveTableRequest) GetUuid() string {
+	if x != nil {
+		return x.Uuid
+	}
+	return ""
+}
+
+func (x *LeaveTableRequest) GetSeat() int32 {
+	if x != nil {
+		return x.Seat
+	}
+	return 0
+}
+
+type LeaveTableResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Error         string                 `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *LeaveTableResponse) Reset() {
+	*x = LeaveTableResponse{}
+	mi := &file_proto_table_v1_table_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LeaveTableResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LeaveTableResponse) ProtoMessage() {}
+
+func (x *LeaveTableResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_table_v1_table_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LeaveTableResponse.ProtoReflect.Descriptor instead.
+func (*LeaveTableResponse) Descriptor() ([]byte, []int) {
+	return file_proto_table_v1_table_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *LeaveTableResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *LeaveTableResponse) GetError() string {
+	if x != nil {
+		return x.Error
+	}
+	return ""
+}
+
 var File_proto_table_v1_table_proto protoreflect.FileDescriptor
 
 const file_proto_table_v1_table_proto_rawDesc = "" +
 	"\n" +
-	"\x1aproto/table/v1/table.proto\x12\x05table\"y\n" +
+	"\x1aproto/table/v1/table.proto\x12\x05table\"w\n" +
 	"\x10JoinTableRequest\x12\x19\n" +
-	"\btable_id\x18\x01 \x01(\tR\atableId\x12\x14\n" +
-	"\x05guest\x18\x02 \x01(\tR\x05guest\x12\x12\n" +
+	"\btable_id\x18\x01 \x01(\tR\atableId\x12\x12\n" +
+	"\x04uuid\x18\x02 \x01(\tR\x04uuid\x12\x12\n" +
 	"\x04seat\x18\x03 \x01(\x05R\x04seat\x12 \n" +
 	"\vbuyInAmount\x18\x04 \x01(\x03R\vbuyInAmount\"]\n" +
 	"\x11JoinTableResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\x12\x14\n" +
-	"\x05error\x18\x03 \x01(\tR\x05error2N\n" +
+	"\x05error\x18\x03 \x01(\tR\x05error\"V\n" +
+	"\x11LeaveTableRequest\x12\x19\n" +
+	"\btable_id\x18\x01 \x01(\tR\atableId\x12\x12\n" +
+	"\x04uuid\x18\x02 \x01(\tR\x04uuid\x12\x12\n" +
+	"\x04seat\x18\x03 \x01(\x05R\x04seat\"D\n" +
+	"\x12LeaveTableResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x14\n" +
+	"\x05error\x18\x02 \x01(\tR\x05error2\x91\x01\n" +
 	"\fTableService\x12>\n" +
-	"\tJoinTable\x12\x17.table.JoinTableRequest\x1a\x18.table.JoinTableResponseBR\n" +
+	"\tJoinTable\x12\x17.table.JoinTableRequest\x1a\x18.table.JoinTableResponse\x12A\n" +
+	"\n" +
+	"LeaveTable\x12\x18.table.LeaveTableRequest\x1a\x19.table.LeaveTableResponseBR\n" +
 	"#com.HeadsUpMastersV2.proto.table.v1B\n" +
 	"TableProtoP\x01Z\x1dGoServer/proto/table/v1;tableb\x06proto3"
 
@@ -180,16 +301,20 @@ func file_proto_table_v1_table_proto_rawDescGZIP() []byte {
 	return file_proto_table_v1_table_proto_rawDescData
 }
 
-var file_proto_table_v1_table_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_proto_table_v1_table_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_proto_table_v1_table_proto_goTypes = []any{
-	(*JoinTableRequest)(nil),  // 0: table.JoinTableRequest
-	(*JoinTableResponse)(nil), // 1: table.JoinTableResponse
+	(*JoinTableRequest)(nil),   // 0: table.JoinTableRequest
+	(*JoinTableResponse)(nil),  // 1: table.JoinTableResponse
+	(*LeaveTableRequest)(nil),  // 2: table.LeaveTableRequest
+	(*LeaveTableResponse)(nil), // 3: table.LeaveTableResponse
 }
 var file_proto_table_v1_table_proto_depIdxs = []int32{
 	0, // 0: table.TableService.JoinTable:input_type -> table.JoinTableRequest
-	1, // 1: table.TableService.JoinTable:output_type -> table.JoinTableResponse
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
+	2, // 1: table.TableService.LeaveTable:input_type -> table.LeaveTableRequest
+	1, // 2: table.TableService.JoinTable:output_type -> table.JoinTableResponse
+	3, // 3: table.TableService.LeaveTable:output_type -> table.LeaveTableResponse
+	2, // [2:4] is the sub-list for method output_type
+	0, // [0:2] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -206,7 +331,7 @@ func file_proto_table_v1_table_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_table_v1_table_proto_rawDesc), len(file_proto_table_v1_table_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

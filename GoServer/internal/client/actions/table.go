@@ -1,21 +1,24 @@
 package actions
 
 import (
-	
 	tablepb "GoServer/proto/table/v1"
 	"context"
 	"fmt"
 	"log"
-	"GoServer/internal/client/network"
+	"time"
+
+	"google.golang.org/grpc"
+	//"GoServer/internal/client/network"
 )
 
-var beConn, err = network.EstablishConn()
 
-func JoinTable(tableId string, guest string, seat int32, amount int64){
-	tableClient := tablepb.NewTableServiceClient(beConn)
-	response, err := tableClient.JoinTable(context.Background(), &tablepb.JoinTableRequest{
+func JoinTable(conn *grpc.ClientConn, tableId string, uuid string, seat int32, amount int64){
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*2)
+	defer cancel()
+	tableClient := tablepb.NewTableServiceClient(conn)
+	response, err := tableClient.JoinTable(ctx, &tablepb.JoinTableRequest{
 		TableId: tableId,
-		Guest: guest,
+		Uuid: uuid,
 		Seat: seat,
 		BuyInAmount: amount,
 	})
@@ -23,7 +26,24 @@ func JoinTable(tableId string, guest string, seat int32, amount int64){
 		log.Printf("ERROR, %v", err)
 		return
 	}
-	fmt.Printf("%s tried to join %s table at seat %d |", guest, tableId, seat)
+	fmt.Printf("%s tried to join %s, seat %d |", uuid, tableId, seat)
 	fmt.Printf("status--> %s, error: %s \n", response.Message, response.Error)
-	defer beConn.Close()
+}
+
+
+func LeaveTable(conn *grpc.ClientConn, tableId string, uuid string, seat int32){
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*2)
+	defer cancel()
+	tableClient := tablepb.NewTableServiceClient(conn)
+	response, err := tableClient.LeaveTable(ctx, &tablepb.LeaveTableRequest{
+		TableId: tableId,
+		Uuid: uuid,
+		Seat: seat,
+	});
+	if err != nil {
+		log.Printf("ERROR: %v", err)
+		return
+	}
+	fmt.Printf("%s tried to leave %s, seat %d|", uuid, tableId, seat)
+	fmt.Printf("status--> %t, error: %s \n", response.Success, response.Error)	
 }

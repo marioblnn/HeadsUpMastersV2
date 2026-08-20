@@ -9,12 +9,15 @@ option java_outer_classname = "TableProto";
 
 service TableService {
   rpc JoinTable(JoinTableRequest) returns (JoinTableResponse);
+  
+  rpc LeaveTable(LeaveTableRequest) returns (LeaveTableResponse);
 }
+
 
 
 message JoinTableRequest {  
   string table_id = 1;
-  string guest = 2;
+  string uuid = 2;
   int32 seat = 3;
   int64 buyInAmount = 4;
 }
@@ -23,4 +26,17 @@ message JoinTableResponse {
   bool success = 1;
   string message = 2;
   string error = 3;
+}
+
+
+message LeaveTableRequest {
+  string table_id = 1;
+  string uuid = 2;
+  int32 seat = 3;
+
+}
+
+message LeaveTableResponse {
+  bool success = 1;
+  string error = 2;
 }

@@ -1,7 +1,7 @@
 package com.HeadsUpMastersV2;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.HeadsUpMastersV2.Servers.GrpcServer;
+import com.HeadsUpMastersV2.servers.GrpcServer;
 
 @SpringBootApplication
 public class DemoApplication {

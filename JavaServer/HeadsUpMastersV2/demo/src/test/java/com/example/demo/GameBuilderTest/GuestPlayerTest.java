@@ -3,8 +3,9 @@ package com.example.demo.GameBuilderTest;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import com.HeadsUpMastersV2.GameBuilder.Card;
-import com.HeadsUpMastersV2.GameBuilder.GuestPlayer;
+
+import com.HeadsUpMastersV2.game.Card;
+import com.HeadsUpMastersV2.game.GuestPlayer;
 
 public class GuestPlayerTest {
     
@@ -16,7 +17,7 @@ public class GuestPlayerTest {
 
         GuestPlayer guestPlayer = new GuestPlayer(guestID, stack, seat);
 
-        assert guestPlayer.getGuestID().equals(guestID) : "Guest ID should match the provided value";
+        assert guestPlayer.getGuestUUID().equals(guestID) : "Guest ID should match the provided value";
        //assert guestPlayer.getStack().equals(stack) : "Stack should match the provided value";
         assert guestPlayer.getSeat().equals(seat) : "Seat should match the provided value";
         assert guestPlayer.getHand().isEmpty() : "Hand should be initialized as empty";
@@ -27,7 +28,7 @@ public class GuestPlayerTest {
         guestPlayer.setHand(List.of(card1, card2));
 
         System.out.println("Guest Player Details:");
-        System.out.println("Guest ID: " + guestPlayer.getGuestID());
+        System.out.println("Guest ID: " + guestPlayer.getGuestUUID());
         System.out.println("Stack: " + guestPlayer.getStack());
         System.out.println("Seat: " + guestPlayer.getSeat());
         System.out.println("Hand: " + guestPlayer.getHand());

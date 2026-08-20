@@ -4,10 +4,11 @@ import (
 	//"fmt"
 	"math/rand"
 	"strings"
+	"github.com/google/uuid"
 )
 
 type Guest struct {
-	Identifier  string  `json:"identifier"`
+	Uuid  string  `json:"uuid"`
 	DisplayName string  `json:"displayName"`
 	Balance     float64 `json:"balance"`
 }
@@ -18,7 +19,7 @@ func NewGuest() Guest {
 	return Guest{
 		DisplayName: username,
 		Balance:     1000.0,
-		Identifier:  "leave it like this",
+		Uuid:  uuid.NewString(),
 	}
 }
 
@@ -41,5 +42,5 @@ func (g *Guest) GetBalance() float64 {
 }
 
 func (g *Guest) GetIdentifier() string {
-	return g.Identifier
+	return g.Uuid
 }
