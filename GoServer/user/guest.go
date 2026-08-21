@@ -41,6 +41,6 @@ func (g *Guest) GetBalance() float64 {
 	return g.Balance
 }
 
-func (g *Guest) GetIdentifier() string {
+func (g *Guest) GetUuid() string {
 	return g.Uuid
 }

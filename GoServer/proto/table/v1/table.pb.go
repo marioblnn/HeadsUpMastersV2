@@ -21,6 +21,146 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type GameState int32
+
+const (
+	GameState_GAME_STATE_UNSPECIFIED GameState = 0
+	GameState_WAITING                GameState = 1
+	GameState_PREFLOP                GameState = 2
+	GameState_FLOP                   GameState = 3
+	GameState_TURN                   GameState = 4
+	GameState_RIVER                  GameState = 5
+	GameState_SHOWDOWN               GameState = 6
+	GameState_ALL_IN                 GameState = 7
+)
+
+// Enum value maps for GameState.
+var (
+	GameState_name = map[int32]string{
+		0: "GAME_STATE_UNSPECIFIED",
+		1: "WAITING",
+		2: "PREFLOP",
+		3: "FLOP",
+		4: "TURN",
+		5: "RIVER",
+		6: "SHOWDOWN",
+		7: "ALL_IN",
+	}
+	GameState_value = map[string]int32{
+		"GAME_STATE_UNSPECIFIED": 0,
+		"WAITING":                1,
+		"PREFLOP":                2,
+		"FLOP":                   3,
+		"TURN":                   4,
+		"RIVER":                  5,
+		"SHOWDOWN":               6,
+		"ALL_IN":                 7,
+	}
+)
+
+func (x GameState) Enum() *GameState {
+	p := new(GameState)
+	*p = x
+	return p
+}
+
+func (x GameState) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (GameState) Descriptor() protoreflect.EnumDescriptor {
+	return file_proto_table_v1_table_proto_enumTypes[0].Descriptor()
+}
+
+func (GameState) Type() protoreflect.EnumType {
+	return &file_proto_table_v1_table_proto_enumTypes[0]
+}
+
+func (x GameState) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use GameState.Descriptor instead.
+func (GameState) EnumDescriptor() ([]byte, []int) {
+	return file_proto_table_v1_table_proto_rawDescGZIP(), []int{0}
+}
+
+type GuestPlayerDTO struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	GuestUUID     string                 `protobuf:"bytes,1,opt,name=guestUUID,proto3" json:"guestUUID,omitempty"`
+	Stack         int64                  `protobuf:"varint,2,opt,name=stack,proto3" json:"stack,omitempty"`
+	Bet           int64                  `protobuf:"varint,3,opt,name=bet,proto3" json:"bet,omitempty"`
+	Seat          int32                  `protobuf:"varint,4,opt,name=seat,proto3" json:"seat,omitempty"`
+	HandScore     int32                  `protobuf:"varint,5,opt,name=handScore,proto3" json:"handScore,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GuestPlayerDTO) Reset() {
+	*x = GuestPlayerDTO{}
+	mi := &file_proto_table_v1_table_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GuestPlayerDTO) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GuestPlayerDTO) ProtoMessage() {}
+
+func (x *GuestPlayerDTO) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_table_v1_table_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GuestPlayerDTO.ProtoReflect.Descriptor instead.
+func (*GuestPlayerDTO) Descriptor() ([]byte, []int) {
+	return file_proto_table_v1_table_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *GuestPlayerDTO) GetGuestUUID() string {
+	if x != nil {
+		return x.GuestUUID
+	}
+	return ""
+}
+
+func (x *GuestPlayerDTO) GetStack() int64 {
+	if x != nil {
+		return x.Stack
+	}
+	return 0
+}
+
+func (x *GuestPlayerDTO) GetBet() int64 {
+	if x != nil {
+		return x.Bet
+	}
+	return 0
+}
+
+func (x *GuestPlayerDTO) GetSeat() int32 {
+	if x != nil {
+		return x.Seat
+	}
+	return 0
+}
+
+func (x *GuestPlayerDTO) GetHandScore() int32 {
+	if x != nil {
+		return x.HandScore
+	}
+	return 0
+}
+
 type JoinTableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	TableId       string                 `protobuf:"bytes,1,opt,name=table_id,json=tableId,proto3" json:"table_id,omitempty"`
@@ -33,7 +173,7 @@ type JoinTableRequest struct {
 
 func (x *JoinTableRequest) Reset() {
 	*x = JoinTableRequest{}
-	mi := &file_proto_table_v1_table_proto_msgTypes[0]
+	mi := &file_proto_table_v1_table_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -45,7 +185,7 @@ func (x *JoinTableRequest) String() string {
 func (*JoinTableRequest) ProtoMessage() {}
 
 func (x *JoinTableRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_table_v1_table_proto_msgTypes[0]
+	mi := &file_proto_table_v1_table_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -58,7 +198,7 @@ func (x *JoinTableRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use JoinTableRequest.ProtoReflect.Descriptor instead.
 func (*JoinTableRequest) Descriptor() ([]byte, []int) {
-	return file_proto_table_v1_table_proto_rawDescGZIP(), []int{0}
+	return file_proto_table_v1_table_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *JoinTableRequest) GetTableId() string {
@@ -100,7 +240,7 @@ type JoinTableResponse struct {
 
 func (x *JoinTableResponse) Reset() {
 	*x = JoinTableResponse{}
-	mi := &file_proto_table_v1_table_proto_msgTypes[1]
+	mi := &file_proto_table_v1_table_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -112,7 +252,7 @@ func (x *JoinTableResponse) String() string {
 func (*JoinTableResponse) ProtoMessage() {}
 
 func (x *JoinTableResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_table_v1_table_proto_msgTypes[1]
+	mi := &file_proto_table_v1_table_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -125,7 +265,7 @@ func (x *JoinTableResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use JoinTableResponse.ProtoReflect.Descriptor instead.
 func (*JoinTableResponse) Descriptor() ([]byte, []int) {
-	return file_proto_table_v1_table_proto_rawDescGZIP(), []int{1}
+	return file_proto_table_v1_table_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *JoinTableResponse) GetSuccess() bool {
@@ -160,7 +300,7 @@ type LeaveTableRequest struct {
 
 func (x *LeaveTableRequest) Reset() {
 	*x = LeaveTableRequest{}
-	mi := &file_proto_table_v1_table_proto_msgTypes[2]
+	mi := &file_proto_table_v1_table_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -172,7 +312,7 @@ func (x *LeaveTableRequest) String() string {
 func (*LeaveTableRequest) ProtoMessage() {}
 
 func (x *LeaveTableRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_table_v1_table_proto_msgTypes[2]
+	mi := &file_proto_table_v1_table_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -185,7 +325,7 @@ func (x *LeaveTableRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LeaveTableRequest.ProtoReflect.Descriptor instead.
 func (*LeaveTableRequest) Descriptor() ([]byte, []int) {
-	return file_proto_table_v1_table_proto_rawDescGZIP(), []int{2}
+	return file_proto_table_v1_table_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *LeaveTableRequest) GetTableId() string {
@@ -219,7 +359,7 @@ type LeaveTableResponse struct {
 
 func (x *LeaveTableResponse) Reset() {
 	*x = LeaveTableResponse{}
-	mi := &file_proto_table_v1_table_proto_msgTypes[3]
+	mi := &file_proto_table_v1_table_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -231,7 +371,7 @@ func (x *LeaveTableResponse) String() string {
 func (*LeaveTableResponse) ProtoMessage() {}
 
 func (x *LeaveTableResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_table_v1_table_proto_msgTypes[3]
+	mi := &file_proto_table_v1_table_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -244,7 +384,7 @@ func (x *LeaveTableResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LeaveTableResponse.ProtoReflect.Descriptor instead.
 func (*LeaveTableResponse) Descriptor() ([]byte, []int) {
-	return file_proto_table_v1_table_proto_rawDescGZIP(), []int{3}
+	return file_proto_table_v1_table_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *LeaveTableResponse) GetSuccess() bool {
@@ -265,7 +405,13 @@ var File_proto_table_v1_table_proto protoreflect.FileDescriptor
 
 const file_proto_table_v1_table_proto_rawDesc = "" +
 	"\n" +
-	"\x1aproto/table/v1/table.proto\x12\x05table\"w\n" +
+	"\x1aproto/table/v1/table.proto\x12\x05table\"\x88\x01\n" +
+	"\x0eGuestPlayerDTO\x12\x1c\n" +
+	"\tguestUUID\x18\x01 \x01(\tR\tguestUUID\x12\x14\n" +
+	"\x05stack\x18\x02 \x01(\x03R\x05stack\x12\x10\n" +
+	"\x03bet\x18\x03 \x01(\x03R\x03bet\x12\x12\n" +
+	"\x04seat\x18\x04 \x01(\x05R\x04seat\x12\x1c\n" +
+	"\thandScore\x18\x05 \x01(\x05R\thandScore\"w\n" +
 	"\x10JoinTableRequest\x12\x19\n" +
 	"\btable_id\x18\x01 \x01(\tR\atableId\x12\x12\n" +
 	"\x04uuid\x18\x02 \x01(\tR\x04uuid\x12\x12\n" +
@@ -281,7 +427,17 @@ const file_proto_table_v1_table_proto_rawDesc = "" +
 	"\x04seat\x18\x03 \x01(\x05R\x04seat\"D\n" +
 	"\x12LeaveTableResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x14\n" +
-	"\x05error\x18\x02 \x01(\tR\x05error2\x91\x01\n" +
+	"\x05error\x18\x02 \x01(\tR\x05error*z\n" +
+	"\tGameState\x12\x1a\n" +
+	"\x16GAME_STATE_UNSPECIFIED\x10\x00\x12\v\n" +
+	"\aWAITING\x10\x01\x12\v\n" +
+	"\aPREFLOP\x10\x02\x12\b\n" +
+	"\x04FLOP\x10\x03\x12\b\n" +
+	"\x04TURN\x10\x04\x12\t\n" +
+	"\x05RIVER\x10\x05\x12\f\n" +
+	"\bSHOWDOWN\x10\x06\x12\n" +
+	"\n" +
+	"\x06ALL_IN\x10\a2\x91\x01\n" +
 	"\fTableService\x12>\n" +
 	"\tJoinTable\x12\x17.table.JoinTableRequest\x1a\x18.table.JoinTableResponse\x12A\n" +
 	"\n" +
@@ -301,18 +457,21 @@ func file_proto_table_v1_table_proto_rawDescGZIP() []byte {
 	return file_proto_table_v1_table_proto_rawDescData
 }
 
-var file_proto_table_v1_table_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_proto_table_v1_table_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_proto_table_v1_table_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
 var file_proto_table_v1_table_proto_goTypes = []any{
-	(*JoinTableRequest)(nil),   // 0: table.JoinTableRequest
-	(*JoinTableResponse)(nil),  // 1: table.JoinTableResponse
-	(*LeaveTableRequest)(nil),  // 2: table.LeaveTableRequest
-	(*LeaveTableResponse)(nil), // 3: table.LeaveTableResponse
+	(GameState)(0),             // 0: table.GameState
+	(*GuestPlayerDTO)(nil),     // 1: table.GuestPlayerDTO
+	(*JoinTableRequest)(nil),   // 2: table.JoinTableRequest
+	(*JoinTableResponse)(nil),  // 3: table.JoinTableResponse
+	(*LeaveTableRequest)(nil),  // 4: table.LeaveTableRequest
+	(*LeaveTableResponse)(nil), // 5: table.LeaveTableResponse
 }
 var file_proto_table_v1_table_proto_depIdxs = []int32{
-	0, // 0: table.TableService.JoinTable:input_type -> table.JoinTableRequest
-	2, // 1: table.TableService.LeaveTable:input_type -> table.LeaveTableRequest
-	1, // 2: table.TableService.JoinTable:output_type -> table.JoinTableResponse
-	3, // 3: table.TableService.LeaveTable:output_type -> table.LeaveTableResponse
+	2, // 0: table.TableService.JoinTable:input_type -> table.JoinTableRequest
+	4, // 1: table.TableService.LeaveTable:input_type -> table.LeaveTableRequest
+	3, // 2: table.TableService.JoinTable:output_type -> table.JoinTableResponse
+	5, // 3: table.TableService.LeaveTable:output_type -> table.LeaveTableResponse
 	2, // [2:4] is the sub-list for method output_type
 	0, // [0:2] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
@@ -330,13 +489,14 @@ func file_proto_table_v1_table_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_table_v1_table_proto_rawDesc), len(file_proto_table_v1_table_proto_rawDesc)),
-			NumEnums:      0,
-			NumMessages:   4,
+			NumEnums:      1,
+			NumMessages:   5,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
 		GoTypes:           file_proto_table_v1_table_proto_goTypes,
 		DependencyIndexes: file_proto_table_v1_table_proto_depIdxs,
+		EnumInfos:         file_proto_table_v1_table_proto_enumTypes,
 		MessageInfos:      file_proto_table_v1_table_proto_msgTypes,
 	}.Build()
 	File_proto_table_v1_table_proto = out.File

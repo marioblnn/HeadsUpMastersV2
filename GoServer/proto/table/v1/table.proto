@@ -8,10 +8,35 @@ option java_package = "com.HeadsUpMastersV2.proto.table.v1";
 option java_outer_classname = "TableProto";
 
 service TableService {
+
+
   rpc JoinTable(JoinTableRequest) returns (JoinTableResponse);
   
   rpc LeaveTable(LeaveTableRequest) returns (LeaveTableResponse);
 }
+
+
+enum GameState{
+        GAME_STATE_UNSPECIFIED = 0;
+        WAITING = 1;
+        PREFLOP = 2;
+        FLOP = 3;
+        TURN = 4;
+        RIVER = 5;
+        SHOWDOWN = 6;
+        ALL_IN = 7;
+    }
+
+    
+
+message GuestPlayerDTO{
+    string guestUUID = 1;
+    int64 stack = 2;
+    int64 bet = 3;
+    int32 seat = 4;
+    int32 handScore = 5;
+}
+
 
 
 

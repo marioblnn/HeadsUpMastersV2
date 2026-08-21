@@ -1,13 +1,15 @@
 package auth
 
-
 import (
+	"GoServer/config"
 	"fmt"
-	"github.com/golang-jwt/jwt/v5"
 	"time"
+	"github.com/golang-jwt/jwt/v5"
+	
 )
 
-var secretKey = []byte("ParseThisMamaMia")
+
+var secretKey = []byte(config.LoadConfig().SecretJWTKey)
 
 
 func GenerateJWT(GuestUsername string) (string, error) {

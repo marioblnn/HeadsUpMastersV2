@@ -1,18 +1,26 @@
 package com.HeadsUpMastersV2.cache;
 
-import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;;
+
+import redis.clients.jedis.ConnectionPoolConfig;
+import redis.clients.jedis.JedisPooled;
 
 public class RedisConfig {
-    private static JedisPool pool;
+    private static final JedisPooled jedisPooled;
+    
 
-    public static synchronized JedisPool getPool(){
-        if (pool == null) {
-            JedisPoolConfig config = new JedisPoolConfig();
-            config.setMaxTotal(32);
-            config.setMaxIdle(16);
-            pool = new JedisPool(config, "localhost", 6379);
-        }
-        return pool;
+    static {
+        ConnectionPoolConfig poolConf = new ConnectionPoolConfig();
+        poolConf.setMaxTotal(32);
+        poolConf.setMaxIdle(16);
+        poolConf.setMinIdle(4);
+        jedisPooled = new JedisPooled(poolConf, "localhost", 6379);;
+
     }
+    
+
+
+    public static JedisPooled getJedis(){
+        return jedisPooled;
+    }
+    
 }
