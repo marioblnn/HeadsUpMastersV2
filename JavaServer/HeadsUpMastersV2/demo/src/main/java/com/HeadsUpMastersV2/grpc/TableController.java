@@ -48,6 +48,10 @@ public class TableController extends TableServiceGrpc.TableServiceImplBase {
         responseObserver.onCompleted();
     }
 
+    public void testPublish(){
+        
+    }
+
 
     @Override
     public void joinTable(JoinTableRequest request, StreamObserver<JoinTableResponse> responseObserver) {

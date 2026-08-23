@@ -1,10 +1,14 @@
 package main
 
 import (
-	tablepb "GoServer/proto/table/v1"
+	"GoServer/auth"
+	"GoServer/internal/cache"
 	clientNetwork "GoServer/internal/client/network"
 	serverNetwork "GoServer/internal/server/network"
-	"GoServer/auth"
+	tablepb "GoServer/proto/table/v1"
+	"context"
+	"fmt"
+
 	//"GoServer/internal/server/handlers"
 	"GoServer/internal/client/actions"
 	"GoServer/internal/server/handlers"
@@ -15,9 +19,11 @@ func main() {
 	conn := clientNetwork.InitGRPC()
 
 	tableClient := tablepb.NewTableServiceClient(conn)
+	cache := cache.GetRedisClient()
 
 	Api := &handlers.HTTPHandler{
 		Handler: &actions.GameEngine{
+			RedisClient: *cache,
 			TableClient: tableClient,
 		},
 	}
@@ -27,6 +33,8 @@ func main() {
 	mux.HandleFunc("/assign-guest", auth.AssignGuest)
 	//mux.HandleFunc("/table-view", $$)
 	mux.HandleFunc("ws/join-table", Api.JoinTableRequest)
+	fmt.Println(cache.Get(context.Background(), "view-tables"))
+	go actions.ListenToLobby(cache)
 
 	serverNetwork.NewServer(port, mux)
 }

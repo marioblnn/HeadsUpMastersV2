@@ -6,7 +6,7 @@ import (
 	"GoServer/config"
 )
 
-func RedisClient() *redis.Client {
+func GetRedisClient() *redis.Client {
 	client := redis.NewClient(&redis.Options{
 		Addr: config.LoadConfig().RedisServerURL,
 	})

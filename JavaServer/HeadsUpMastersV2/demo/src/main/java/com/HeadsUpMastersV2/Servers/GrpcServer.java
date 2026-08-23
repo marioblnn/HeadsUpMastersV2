@@ -4,6 +4,9 @@ import io.grpc.netty.shaded.io.grpc.netty.NettyServerBuilder;
 import io.grpc.protobuf.services.HealthStatusManager;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
+
+import com.HeadsUpMastersV2.cache.SessionRepository;
+import com.HeadsUpMastersV2.dto.LobbyTableModel;
 import com.HeadsUpMastersV2.grpc.TableController;
 import io.grpc.health.v1.HealthCheckResponse.ServingStatus;
 
@@ -26,8 +29,11 @@ public class GrpcServer {
 
     public void start() throws IOException, InterruptedException {
         server.start();
+        SessionRepository sr = new SessionRepository();
         healthStatusManager.setStatus("", ServingStatus.SERVING);
         System.out.println("Java gRPC Server running on port " + port);
+        LobbyTableModel tm = new LobbyTableModel("table-001", 1, 2, 100, 200);
+        sr.testPublish(tm);
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.out.println("Shutting down gRPC server...");
             if (server != null) {

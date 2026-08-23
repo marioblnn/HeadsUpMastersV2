@@ -9,7 +9,7 @@ public class LobbyTableModel {
     private final long bigBlind;
     private final long minbuyIn;
     private final long maxBuyIn;
-    private final int playerCount;
+    private int playerCount;
 
 
     public LobbyTableModel(
@@ -26,6 +26,14 @@ public class LobbyTableModel {
         this.minbuyIn = minBuyIn;
         this.maxBuyIn = maxBuyIn;
         this.playerCount = 0;
+    }
+
+    public void increasePlayereCount(){
+        this.playerCount += 1;
+    }
+
+    public void decreasePlayerCount(){
+        this.playerCount -= 1;
     }
 
 }
