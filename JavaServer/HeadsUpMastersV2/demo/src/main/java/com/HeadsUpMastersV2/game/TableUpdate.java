@@ -260,11 +260,8 @@ public class TableUpdate {
             smallBlind, 
             bigBlind,
             minbuyIn, 
-            maxBuyIn, 
-            buttonPositionIndex, 
-            availableSeats, 
-            players, 
-            gameState);
+            maxBuyIn
+            );
     }
 
 

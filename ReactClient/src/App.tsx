@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-//import { pingServer} from "./api/auth";
+import { test} from "./api/auth";
 import { requestGuest } from "./api/auth";
 
 export interface Guest {
@@ -16,6 +16,7 @@ function App() {
 
   useEffect(() => {
   async function getGuestData(){
+    test()
     try {
       const guest:Guest = await requestGuest()
       setDisplayName(guest.displayName)

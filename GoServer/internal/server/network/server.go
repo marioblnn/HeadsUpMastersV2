@@ -1,15 +1,15 @@
 package network
 
 import (
+	"GoServer/config"
 	"fmt"
 	"log"
 	"net/http"
-	"GoServer/auth"
 )
 
 func enableCORS(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin", "http://localhost:5173")
+		w.Header().Set("Access-Control-Allow-Origin", config.LoadConfig().FrontendURL)
 		w.Header().Set("Access-Control-Allow-Credentials", "true")
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
@@ -22,20 +22,16 @@ func enableCORS(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
-func handleHealth(w http.ResponseWriter, r *http.Request){
+func handleHealth(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("OK"))
 }
 
-
-
-func NewServer(port string) {
+func NewServer(port string, router *http.ServeMux) {
 	http.HandleFunc("/health", enableCORS(handleHealth))
-	http.HandleFunc("/assign-guest", enableCORS(auth.ValidateGuest))
-
 
 	fmt.Println("Starting the server...")
-	err := http.ListenAndServe(port, nil)
+	err := http.ListenAndServe(port, router)
 	fmt.Println("Go server is up")
 
 	if err != nil {

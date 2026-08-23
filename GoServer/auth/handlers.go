@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"GoServer/user"
+	"GoServer/model"
 	"encoding/json"
 	"log"
 	"net/http"
@@ -14,7 +14,7 @@ func ValidateGuest(w http.ResponseWriter, r *http.Request) {
 		AssignGuest(w, r)
 		return
 	}
-	err = ValidateJWT(cookie.Value)
+	_ , err = ExtractIDFromJWT(cookie.Value)
 	if err != nil {
 		AssignGuest(w, r)
 		return
@@ -22,8 +22,8 @@ func ValidateGuest(w http.ResponseWriter, r *http.Request) {
 }
 
 func AssignGuest(w http.ResponseWriter, r *http.Request) {
-	g := user.NewGuest()
-	token, err := GenerateJWT(g.DisplayName)
+	g := model.NewGuest()
+	token, err := GenerateJWT(g.Uuid)
 	if err != nil {
 		http.Error(w, "Could not generate the token", http.StatusInternalServerError)
 		return

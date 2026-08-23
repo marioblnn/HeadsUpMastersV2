@@ -15,6 +15,11 @@ export async function pingServer() {
   console.log("Cannot connect to the server")
 }
 
+export async function test(){
+  const response = await axios.get("http://localhost:8080/view-tables")
+  console.log(response)
+}
+
 
 export async function requestGuest() {
     const response = await axios.get("http://localhost:8080/assign-guest", {
