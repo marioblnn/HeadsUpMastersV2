@@ -4,37 +4,41 @@ import (
 	//"fmt"
 	"math/rand"
 	"strings"
+
 	"github.com/google/uuid"
 )
 
 type Guest struct {
-	Uuid  string  `json:"uuid"`
-	DisplayName string  `json:"displayName"`
-	Balance     float64 `json:"balance"`
+	Uuid         string   `json:"uuid"`
+	DisplayName  string   `json:"displayName"`
+	Balance      float64  `json:"balance"`
+	ActiveTables []string `json:"activeTables"`
 }
 
-type GuestDTO struct{
-	DisplayName string
-	Balance float64
+type GuestDTO struct {
+	DisplayName  string   `json:"displayName"`
+	Balance      float64  `json:"balance"`
+	ActiveTables []string `json:"activeTables"`
 }
 
 func NewGuest() Guest {
 	username := generateDisplayName()
 
 	return Guest{
-		DisplayName: username,
-		Balance:     1000.0,
-		Uuid:  uuid.NewString(),
+		DisplayName:  username,
+		Balance:      1000.0,
+		Uuid:         uuid.NewString(),
+		ActiveTables: make([]string, 0),
 	}
 }
 
-func (g *Guest) ToGuestDTO() *GuestDTO{
+func (g *Guest) ToGuestDTO() *GuestDTO {
 	return &GuestDTO{
-		DisplayName: g.DisplayName,
-		Balance: g.Balance,
+		DisplayName:  g.DisplayName,
+		Balance:      g.Balance,
+		ActiveTables: g.ActiveTables,
 	}
 }
-
 
 func generateDisplayName() string {
 	chars := "0123456789"

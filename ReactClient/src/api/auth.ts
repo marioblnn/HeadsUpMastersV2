@@ -3,7 +3,7 @@ import axios from "axios";
 export interface Guest {
     displayName:string
     balance:number
-    identifier:string
+    ava:string
 }
 
 export async function pingServer() {

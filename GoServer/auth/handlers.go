@@ -9,7 +9,7 @@ import (
 
 
 
-func CreateUser(_ http.ResponseWriter, r *http.Request,) (*model.Guest, *http.Cookie, error){
+func GetNewUser(_ http.ResponseWriter, r *http.Request,) (*model.Guest, *http.Cookie, error){
 	g := model.NewGuest()
 	token, err := GenerateJWT(g.Uuid)
 	if err != nil {

@@ -1,38 +1,30 @@
 package cache
 
 import (
+	"GoServer/model"
 	"context"
 	"encoding/json"
 	"fmt"
 	"time"
-
-	"github.com/redis/go-redis/v9"
 )
 
 
-type ActiveUser struct{
-	DisplayName string `json:"displayName"`
-	Balance int64 `json:"balance"`
-	ActiveTables []string `json:"activeTables"`
-}
 
 
-func SaveUserSession(r *redis.Client, displayName string, balance int64, tables []string){
+func (r *AppRedis) SaveUserSession(uuid string, g *model.GuestDTO) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
-	user := &ActiveUser{
-		DisplayName: displayName,
-		Balance: balance,
-		ActiveTables: tables,
-	}
-	jsonActiveUser, err := json.Marshal(user)
+	
+	jsonActiveUser, err := json.Marshal(g)
 	if err != nil {
-		return 
+		return fmt.Errorf("Could not parse user into json")
 	}
-	r.HSet(ctx, "active-users", jsonActiveUser)
+	r.AppCache.HSet(ctx, "active-users", uuid, jsonActiveUser)
+	return nil
 }
 
-func (r* AppRedis) GetUserSession(uuid string) (*ActiveUser, error) {
+
+func (r* AppRedis) GetUserSession(uuid string) (*model.GuestDTO, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second *3)
 	defer cancel()
 
@@ -41,7 +33,7 @@ func (r* AppRedis) GetUserSession(uuid string) (*ActiveUser, error) {
 		return nil, fmt.Errorf("User not found!\n")
 
 	}
-	var user ActiveUser;
+	var user model.GuestDTO;
 	err = json.Unmarshal([]byte(userData), &user)
 	if err != nil {
 		return nil, fmt.Errorf("Could not parse the user: \n")
