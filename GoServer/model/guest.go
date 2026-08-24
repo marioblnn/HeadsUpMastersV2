@@ -13,6 +13,11 @@ type Guest struct {
 	Balance     float64 `json:"balance"`
 }
 
+type GuestDTO struct{
+	DisplayName string
+	Balance float64
+}
+
 func NewGuest() Guest {
 	username := generateDisplayName()
 
@@ -22,6 +27,14 @@ func NewGuest() Guest {
 		Uuid:  uuid.NewString(),
 	}
 }
+
+func (g *Guest) ToGuestDTO() *GuestDTO{
+	return &GuestDTO{
+		DisplayName: g.DisplayName,
+		Balance: g.Balance,
+	}
+}
+
 
 func generateDisplayName() string {
 	chars := "0123456789"

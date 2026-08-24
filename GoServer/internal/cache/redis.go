@@ -6,10 +6,20 @@ import (
 	"GoServer/config"
 )
 
+type AppRedis struct{
+	AppCache *redis.Client
+}
+
+func NewCache(r *redis.Client) *AppRedis {
+	return &AppRedis{
+		AppCache: r,
+	}
+}
+
 func GetRedisClient() *redis.Client {
 	client := redis.NewClient(&redis.Options{
 		Addr: config.LoadConfig().RedisServerURL,
 	})
 	fmt.Println("Connected to redis")
-	return client
+	return client;
 }

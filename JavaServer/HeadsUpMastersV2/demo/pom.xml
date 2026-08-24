@@ -17,6 +17,7 @@
 
     <properties>
         <java.version>21</java.version>
+        <lombok.version>1.18.34</lombok.version>
         <grpc.version>1.62.2</grpc.version>
         <protobuf.version>3.25.3</protobuf.version>
     </properties>
@@ -26,8 +27,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
-
-        <!-- gRPC Dependencies -->
         <dependency>
             <groupId>io.grpc</groupId>
             <artifactId>grpc-netty-shaded</artifactId>
@@ -57,19 +56,16 @@
             <artifactId>protobuf-java</artifactId>
             <version>${protobuf.version}</version>
         </dependency>
-
         <dependency>
             <groupId>javax.annotation</groupId>
             <artifactId>javax.annotation-api</artifactId>
             <version>1.3.2</version>
         </dependency>
-
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -83,8 +79,6 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-
-            <!-- Reliable Protoc Compiler Plugin -->
             <plugin>
                 <groupId>com.github.os72</groupId>
                 <artifactId>protoc-jar-maven-plugin</artifactId>
@@ -115,8 +109,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <!-- Adds generated protobuf classes to the build classpath -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>

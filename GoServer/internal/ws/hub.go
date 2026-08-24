@@ -7,11 +7,13 @@ import (
 
 type WSHub struct {
 	Clients map[*websocket.Conn]bool
+	Rooms map[string]map[*websocket.Conn]bool
 	Mu  sync.RWMutex
 }
 
 func NewWSHub() *WSHub {
 	return &WSHub{
-		Clients: map[*websocket.Conn]bool{},
+		Clients: make(map[*websocket.Conn]bool),
+		Rooms: make(map[string]map[*websocket.Conn]bool),
 	}
 }

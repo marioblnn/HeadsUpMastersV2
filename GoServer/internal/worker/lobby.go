@@ -10,7 +10,7 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-func LobbyUpdates(r *redis.Client, hub *ws.WSHub) {
+func SendLobbyUpdates(r *redis.Client, hub *ws.WSHub) {
 	ctx := context.Background() 
 	
 	pubsub := r.Subscribe(ctx, "view-tables")

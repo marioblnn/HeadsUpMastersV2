@@ -29,11 +29,11 @@ public class GrpcServer {
 
     public void start() throws IOException, InterruptedException {
         server.start();
-        SessionRepository sr = new SessionRepository();
-        healthStatusManager.setStatus("", ServingStatus.SERVING);
+        //SessionRepository sr = new SessionRepository();
+        //healthStatusManager.setStatus("", ServingStatus.SERVING);
         System.out.println("Java gRPC Server running on port " + port);
-        LobbyTableModel tm = new LobbyTableModel("table-001", 1, 2, 100, 200);
-        sr.testPublish(tm);
+        //LobbyTableModel tm = new LobbyTableModel("table-001", 1, 2, 100, 200);
+        //sr.testPublish(tm);
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.out.println("Shutting down gRPC server...");
             if (server != null) {

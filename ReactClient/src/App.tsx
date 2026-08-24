@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { test} from "./api/auth";
+import { pingBE} from "./api/auth";
 import { requestGuest } from "./api/auth";
 
 export interface Guest {
@@ -16,7 +16,6 @@ function App() {
 
   useEffect(() => {
   async function getGuestData(){
-    test()
     try {
       const guest:Guest = await requestGuest()
       setDisplayName(guest.displayName)
@@ -34,7 +33,7 @@ function App() {
     <h1>Welcome back {displayName} !</h1>
     <h3>{identifier}</h3>
     <h1>balance {balance}</h1>
-    <button className="w-20 h-10 bg-green-600">auth action</button>
+    <button className="w-20 h-10 bg-green-600" onClick={pingBE}>ping action</button>
     </>
   );
 }

@@ -2,31 +2,18 @@ package auth
 
 import (
 	"GoServer/model"
-	"encoding/json"
-	"log"
+	"fmt"
 	"net/http"
 	"time"
 )
 
-func ValidateGuest(w http.ResponseWriter, r *http.Request) {
-	cookie, err := r.Cookie("auth_token")
-	if err != nil {
-		AssignGuest(w, r)
-		return
-	}
-	_ , err = ExtractIDFromJWT(cookie.Value)
-	if err != nil {
-		AssignGuest(w, r)
-		return
-	}
-}
 
-func AssignGuest(w http.ResponseWriter, r *http.Request) {
+
+func CreateUser(_ http.ResponseWriter, r *http.Request,) (*model.Guest, *http.Cookie, error){
 	g := model.NewGuest()
 	token, err := GenerateJWT(g.Uuid)
 	if err != nil {
-		http.Error(w, "Could not generate the token", http.StatusInternalServerError)
-		return
+		return nil, nil, fmt.Errorf("Could not generate the token")
 	}
 	cookie := http.Cookie{
 		Name:     "auth_token",
@@ -36,12 +23,8 @@ func AssignGuest(w http.ResponseWriter, r *http.Request) {
 		MaxAge:   24 * 60 * 60,
 		HttpOnly: true,
 		Secure:   r.TLS != nil,
-		SameSite: http.SameSiteStrictMode,
+		SameSite: http.SameSiteLaxMode,
 	}
-	http.SetCookie(w, &cookie)
-	w.Header().Set("Content-Type", "application/json")
-	if err := json.NewEncoder(w).Encode(g); err != nil {
-		log.Printf("Could not encode the guest: %v", err)
-	}
+	return &g, &cookie, nil
 
 }
