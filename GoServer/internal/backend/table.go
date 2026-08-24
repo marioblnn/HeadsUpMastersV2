@@ -1,4 +1,4 @@
-package actions
+package backend
 
 import (
 	tablepb "GoServer/proto/table/v1"
@@ -6,23 +6,9 @@ import (
 	"fmt"
 	"log"
 	"time"
-
-	"github.com/redis/go-redis/v9"
 	"google.golang.org/grpc"
 )
 
-func ListenToLobby(r *redis.Client) {
-	ctx := context.Background()
-	
-	pubsub := r.Subscribe(ctx, "view-tables")
-	defer pubsub.Close()
-	ch := pubsub.Channel()
-    fmt.Println("Listening for lobby updates...")
-
-	for msg := range ch {
-		fmt.Printf("Channel: %s, payload: %s \n", msg.Channel, msg.Payload)
-	}
-}
 
 
 func (hconn *GameEngine) JoinTable (tableId string, uuid string, seat int32, amount int64) (bool, string) {
