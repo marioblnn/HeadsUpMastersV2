@@ -4,7 +4,6 @@ import (
 	//"fmt"
 	"math/rand"
 	"strings"
-
 	"github.com/google/uuid"
 )
 
@@ -50,14 +49,3 @@ func generateDisplayName() string {
 	return identifier.String()
 }
 
-func (g *Guest) GetDisplayName() string {
-	return g.DisplayName
-}
-
-func (g *Guest) GetBalance() float64 {
-	return g.Balance
-}
-
-func (g *Guest) GetUuid() string {
-	return g.Uuid
-}
