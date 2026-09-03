@@ -1,6 +1,6 @@
-import { PlayingCard } from "./PlayingCard";
-import type { CardData } from "./cardConfig";
-import { useBackendHealthGate } from "../hooks/useBackendHealthGate";
+import { PlayingCard } from "../poker/PlayingCard";
+import type { CardData } from "../poker/cardConfig";
+import { useBackendHealthGate } from "../../hooks/useBackendHealthGate";
 
 function ServerUnreachableScreen() {
   const cards: CardData[] = [

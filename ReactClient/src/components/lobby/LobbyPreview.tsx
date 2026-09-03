@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { lobbyTables, type LobbyTable } from "../data/lobby";
+import { lobbyTables, type LobbyTable } from "../../data/lobby";
 
 function LobbyToolbar() {
   return (
@@ -33,6 +33,14 @@ function getOccupancyClass(occupancy: LobbyTable["occupancy"]) {
   if (occupancy === 1) return "lobby-row__players-badge--full";
   if (occupancy === 0.5) return "lobby-row__players-badge--half";
   return "lobby-row__players-badge--open";
+}
+
+function openTableWindow(tableId: LobbyTable["id"]) {
+  window.open(
+    `/table-${tableId}`,
+    `table-${tableId}`,
+    "popup=yes,width=800,height=700",
+  );
 }
 
 function LobbyTableRow({ table }: { table: LobbyTable }) {
@@ -69,7 +77,11 @@ function LobbyTableRow({ table }: { table: LobbyTable }) {
       </div>
 
       <div className="lobby-row__actions">
-        <button className="lobby-row__play" type="button">
+        <button
+          className="lobby-row__play"
+          type="button"
+          onClick={() => openTableWindow(table.id)}
+        >
           Join
         </button>
       </div>

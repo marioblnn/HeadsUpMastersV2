@@ -1,10 +1,10 @@
 import axios from "axios";
-import type { Guest } from "../types";
+import type { Guest } from "../models/guest";
 
 const GUEST_API = "http://localhost:8090";
 const GAME_API = "http://localhost:8090";
 
-export const BACKEND_HEALTH_GUARD_ENABLED = true;
+export const BACKEND_HEALTH_GUARD_ENABLED = false;
 
 export async function requestGuest(): Promise<Guest> {
   const { data } = await axios.get<Guest>(`${GUEST_API}/`, { withCredentials: true });
