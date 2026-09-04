@@ -1,5 +1,8 @@
 import { ArrowLeft, CircleHelp, Settings2, Volume2 } from "lucide-react";
+import { useState } from "react";
 import { lobbyTables, type LobbyTable } from "../../data/lobby";
+import { JoinTablePage } from "./JoinTablePage";
+import { TableSeat } from "./TableSeat";
 
 function getTableFromPathname(pathname: string): LobbyTable | undefined {
   const match = pathname.match(/^\/table-(\d+)$/);
@@ -10,6 +13,7 @@ function getTableFromPathname(pathname: string): LobbyTable | undefined {
 
 export function TablePage() {
   const table = getTableFromPathname(window.location.pathname);
+  const [isJoinOpen, setIsJoinOpen] = useState(false);
 
   if (!table) {
     return null;
@@ -45,10 +49,18 @@ export function TablePage() {
       <section className="table-page__workspace" aria-label={`${table.name} poker table`}>
         <div className="table-page__table-area">
           <div className="table-felt">
-            <div className="table-felt__rail" />
+            <div className="table-felt__rail">
+              <TableSeat position="top" onJoin={() => setIsJoinOpen(true)} />
+              <div className="table-felt__center-mark" aria-hidden="true">
+                <span>{table.stakes}</span>
+                <small>NO LIMIT HOLD&apos;EM</small>
+              </div>
+              <TableSeat position="bottom" onJoin={() => setIsJoinOpen(true)} />
+            </div>
           </div>
         </div>
       </section>
+      {isJoinOpen && <JoinTablePage table={table} onClose={() => setIsJoinOpen(false)} />}
     </main>
   );
 }
