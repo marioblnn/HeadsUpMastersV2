@@ -1,0 +1,39 @@
+name: Go Server CI Tests
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'GoServer/**'
+      - '.github/workflows/go-gateway-ci.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'GoServer/**'
+      - '.github/workflows/go-gateway-ci.yml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./GoServer
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: 'GoServer/go.mod'
+          cache-dependency-path: 'GoServer/go.sum'
+
+      - name: Install dependencies
+        run: go mod download
+
+      - name: Run tests
+        run: go test -v ./...

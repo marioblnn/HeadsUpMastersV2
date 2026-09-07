@@ -47,5 +47,3 @@ func ExtractIDFromJWT(tokenString string) (string, error) {
 	}
 	return uuid, nil
 }
-
-
