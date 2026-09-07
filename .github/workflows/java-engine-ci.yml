@@ -1,0 +1,40 @@
+name: Java Server CI Tests
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'JavaServer/**'
+      - '.github/workflows/java-engine-ci.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'JavaServer/**'
+      - '.github/workflows/java-engine-ci.yml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./JavaServer/HeadsUpMastersV2/demo
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'maven'
+
+      - name: Grant execute permission for Maven wrapper
+        run: chmod +x mvnw
+
+      - name: Build and run tests
+        run: ./mvnw clean test
