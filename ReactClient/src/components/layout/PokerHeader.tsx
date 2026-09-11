@@ -6,10 +6,7 @@ function BrandMark() {
   return (
     <a className="brand-mark" href="/" aria-label="Heads Up Masters home">
       <img className="brand-mark__icon" src={logo} alt="" />
-      <span className="brand-mark__name">
-        Heads Up Masters v2
-        <span className="brand-mark__byline">by Mario Balan</span>
-      </span>
+      <span className="brand-mark__name">Heads Up Masters</span>
     </a>
   );
 }

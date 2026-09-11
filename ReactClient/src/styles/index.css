@@ -383,15 +383,11 @@ main { max-width: 1240px; margin: 0 auto; padding: 64px 32px 0; }
 .table-felt__center-mark { display: flex; flex-direction: column; align-items: center; gap: 4px; color: rgba(236, 232, 213, 0.55); font-family: "Playfair Display", Georgia, serif; letter-spacing: 0.08em; text-align: center; text-transform: uppercase; }
 .table-felt__center-mark span { font-size: clamp(16px, 2.4vw, 28px); }
 .table-felt__center-mark small { color: rgba(236, 232, 213, 0.36); font-family: "DM Sans", sans-serif; font-size: clamp(7px, 0.7vw, 10px); letter-spacing: 0.14em; }
-.table-seat { position: absolute; display: flex; align-items: center; gap: 9px; min-width: 136px; padding: 10px 13px; color: var(--ink); background: rgba(20, 27, 30, 0.9); border: 1px solid rgba(231, 184, 88, 0.44); border-radius: 8px; box-shadow: 0 10px 22px rgba(5, 12, 13, 0.22); cursor: pointer; text-align: left; transform: translateX(-50%); transition: border-color 160ms ease, background 160ms ease, box-shadow 160ms ease, transform 160ms ease; }
+.table-seat { position: absolute; display: grid; width: 86px; height: 86px; place-items: center; padding: 0; color: var(--gold); background: rgba(20, 27, 30, 0.9); border: 1px solid rgba(231, 184, 88, 0.56); border-radius: 50%; box-shadow: 0 10px 22px rgba(5, 12, 13, 0.22); cursor: pointer; transform: translateX(-50%); transition: border-color 160ms ease, background 160ms ease, box-shadow 160ms ease, transform 160ms ease; }
 .table-seat:hover { background: rgba(29, 39, 39, 0.96); border-color: var(--gold); box-shadow: 0 12px 24px rgba(5, 12, 13, 0.36), 0 0 0 4px rgba(231, 184, 88, 0.08); transform: translateX(-50%) translateY(-3px); }
 .table-seat:focus-visible { outline: 2px solid var(--gold-bright); outline-offset: 3px; }
-.table-seat--top { top: 6%; left: 50%; }
-.table-seat--bottom { bottom: 6%; left: 50%; }
-.table-seat__icon { display: grid; width: 29px; height: 29px; place-items: center; color: var(--gold); background: rgba(231, 184, 88, 0.12); border-radius: 50%; }
-.table-seat__copy { display: flex; flex-direction: column; gap: 2px; }
-.table-seat__copy strong { font-size: 11px; }
-.table-seat__copy small { color: var(--muted); font-size: 9px; }
+.table-seat--top { top: 1%; left: 50%; }
+.table-seat--bottom { bottom: 1%; left: 50%; }
 
 .join-page { position: fixed; z-index: 10; inset: 0; display: flex; align-items: center; justify-content: center; padding: 20px; background: rgba(5, 8, 13, 0.64); backdrop-filter: blur(6px); animation: join-overlay-in 180ms ease-out; }
 .join-card { position: relative; width: min(100%, 430px); padding: clamp(24px, 4vw, 38px); background: rgba(30, 34, 48, 0.98); border: 1px solid var(--border-strong); border-radius: 12px; box-shadow: 0 22px 60px rgba(4, 6, 12, 0.7); animation: join-card-in 180ms ease-out; }
@@ -433,10 +429,7 @@ main { max-width: 1240px; margin: 0 auto; padding: 64px 32px 0; }
   .table-page__tools { gap: 0; }
   .table-page__tools button { padding: 6px; }
   .table-page__title > div { text-align: left; }
-  .table-seat { min-width: 118px; padding: 8px 10px; }
-  .table-seat__icon { width: 25px; height: 25px; }
-  .table-seat__copy strong { font-size: 10px; }
-  .table-seat__copy small { font-size: 8px; }
+  .table-seat { width: 70px; height: 70px; }
 }
 
 .below-fold { display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, 0.75fr); align-items: center; gap: 80px; max-width: 900px; margin: 76px auto 0; padding-bottom: 72px; }

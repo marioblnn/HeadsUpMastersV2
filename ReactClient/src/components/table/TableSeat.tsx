@@ -1,4 +1,4 @@
-import { UserRound } from "lucide-react";
+import { Plus } from "lucide-react";
 
 type TableSeatProps = {
   position: "top" | "bottom";
@@ -13,13 +13,7 @@ export function TableSeat({ position, onJoin }: TableSeatProps) {
       onClick={onJoin}
       aria-label={`Join the ${position} seat`}
     >
-      <span className="table-seat__icon" aria-hidden="true">
-        <UserRound size={18} />
-      </span>
-      <span className="table-seat__copy">
-        <strong>Open seat</strong>
-        <small>Click to join</small>
-      </span>
+      <Plus size={36} strokeWidth={1.8} aria-hidden="true" />
     </button>
   );
 }
